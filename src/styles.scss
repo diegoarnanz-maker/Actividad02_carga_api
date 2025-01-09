@@ -1,1 +1,23 @@
-/* You can add global styles to this file, and also import other style files */
+/* Colores principales */
+$primary: #36413e;
+$secondary: #5d5e60;
+
+/* Colores complementarios */
+$success: #0c8e00;
+$danger: #e74c3c;
+$warning: #f5a623;
+$info: #beb2c8;
+
+/* Fondos */
+$light: #d7d6d6;
+$dark: #2c2c2c;
+$background-color: #f9fafb;
+$card-background: #ffffff;
+$navbar-background: $primary;
+
+/* Textos */
+$text-color: #333333;
+$text-muted: #888888;
+$link-color: $secondary;
+
+@import 'bootstrap/scss/bootstrap';
