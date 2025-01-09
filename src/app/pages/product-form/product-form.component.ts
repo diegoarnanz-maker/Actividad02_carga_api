@@ -9,6 +9,7 @@ import { ProductServiceService } from '../../services/product-service.service';
 import { IProduct } from '../../models/iproduct';
 
 import { v4 as uuidv4 } from 'uuid';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-form',
@@ -29,6 +30,7 @@ export class ProductFormComponent {
   categories: string[] = [];
 
   productService = inject(ProductServiceService);
+  router = inject(Router);
   
   constructor() {
     this.addProductForm = new FormGroup({
@@ -77,6 +79,7 @@ export class ProductFormComponent {
     this.addProductForm.reset();
   }
 
+  //Utilizo el uuidv4 para generar un id unico para cada producto
   onSubmit() {
     if (this.addProductForm.valid) {
       const formProduct = {
@@ -86,6 +89,7 @@ export class ProductFormComponent {
       this.productService.addProduct(formProduct);
       console.log('Producto guardado:', formProduct);
       this.resetForm();
+      this.router.navigate(['/product-list']);
     } else {
       console.error('Formulario inválido');
     }

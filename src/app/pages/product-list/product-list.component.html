@@ -1,19 +1,24 @@
 <div class="container">
-    <div class="row g-4">
-      @for(product of products; track product._id){
-          <div class="col-sm-6 col-md-4 col-lg-3">
-              <app-product-card 
-                [product]="product"
-                (deleteProduct)="onDeleteProduct(product._id)"
-                />
-          </div>
-      } @empty {
-        <div class="col">
-          <div class="alert alert-warning text-center">
-            No hay productos para mostrar
-          </div>
-        </div>
-      }
-    </div>
+  <div class="p-3 rounded mb-4 bg-dark text-light">
+    <app-product-filter
+      [products]="products"
+      (filtersChanged)="applyFilters($event)"
+    ></app-product-filter>
   </div>
-  
+  <div class="row g-4">
+    @for(product of filteredProducts; track product._id) {
+    <div class="col-sm-6 col-md-4 col-lg-3">
+      <app-product-card
+        [product]="product"
+        (deleteProduct)="onDeleteProduct(product._id)"
+      ></app-product-card>
+    </div>
+    } @empty {
+    <div class="col">
+      <div class="alert alert-warning text-center">
+        No hay productos para mostrar
+      </div>
+    </div>
+    }
+  </div>
+</div>
