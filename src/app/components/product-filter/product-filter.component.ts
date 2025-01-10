@@ -17,6 +17,7 @@ export class ProductFilterComponent {
   constructor() {}
 
   ngOnChanges(): void {
+    console.log('Productos recibidos en el filtro:', this.products);
     this.extractCategories();
   }
 
@@ -26,12 +27,10 @@ export class ProductFilterComponent {
 
   applyFilters(filterForm: NgForm): void {
     this.filtersChanged.emit(filterForm.value);
-    console.log(filterForm.value);
   }
 
   clearFilters(form: NgForm): void {
-    form.resetForm(); // Limpia los valores del formulario
-    this.filtersChanged.emit({}); // Enviar un filtro vacío
+    form.resetForm();
+    this.filtersChanged.emit({});
   }
-  
 }

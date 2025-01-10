@@ -39,6 +39,7 @@ export class ProductListComponent implements OnInit {
   onDeleteProduct(id: string): void {
     this.productService.deleteProduct(id);
     this.products = this.productService.getArrLocal();
+    this.filteredProducts = this.productService.filterProducts({});
   }
 
   applyFilters(filters: any): void {

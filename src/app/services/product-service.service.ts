@@ -49,17 +49,21 @@ export class ProductServiceService {
       const matchesName =
         !filters.nombre ||
         product.name.toLowerCase().includes(filters.nombre.toLowerCase());
+  
       const matchesCategory =
-        !filters.categoria || product.category === filters.categoria;
+        !filters.categoria || product.category.trim() === filters.categoria.trim();
+  
       const matchesMinPrice =
-        !filters.precioMin || product.price >= +filters.precioMin;
+        !filters.precioMin || product.price >= Number(filters.precioMin);
+  
       const matchesMaxPrice =
-        !filters.precioMax || product.price <= +filters.precioMax;
+        !filters.precioMax || product.price <= Number(filters.precioMax);
+  
       const matchesActive =
         filters.activo === undefined ||
         filters.activo === '' ||
         product.active === (filters.activo === 'true');
-
+  
       return (
         matchesName &&
         matchesCategory &&
@@ -69,7 +73,7 @@ export class ProductServiceService {
       );
     });
   }
-
+  
   //JsonBlob no permite hacer todas las operaciones CRUD, solo GET y POST. Pero lo dejo comentado.
   //DeleteById
   // async deleteProduct(id: string): Promise<void> {
