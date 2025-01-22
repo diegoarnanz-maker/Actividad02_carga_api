@@ -8,6 +8,7 @@ export class ProductServiceService {
   private apiUrl = 'https://jsonblob.com/api/1326627873758568448';
   private products: IProduct[] = [];
 
+  //El fetch deberia estar en el constructor
   constructor() {}
 
   // GetAll, podria hacerse con httpclient, pero JsonBlob no permite hacer todas las operaciones CRUD, solo GET y POST. Lo hago con un fetch dentro de una funcion para poder reutilizarlo y capturar errores.
