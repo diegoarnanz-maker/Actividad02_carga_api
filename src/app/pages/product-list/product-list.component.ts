@@ -39,8 +39,14 @@ export class ProductListComponent implements OnInit {
   onDeleteProduct(id: string): void {
     this.productService.deleteProduct(id);
     this.products = this.productService.getArrLocal();
-    this.filteredProducts = this.productService.filterProducts({});
-  }
+    this.filteredProducts = this.productService.filterProducts({
+      nombre: '',
+      categoria: '',
+      precioMin: undefined,
+      precioMax: undefined,
+      activo: undefined,
+    });
+      }
 
   applyFilters(filters: any): void {
     console.log('Filtros aplicados:', filters);

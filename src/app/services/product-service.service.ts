@@ -5,13 +5,14 @@ import { IProduct } from '../models/iproduct';
   providedIn: 'root',
 })
 export class ProductServiceService {
-  private apiUrl = 'https://jsonblob.com/api/1326627873758568448';
+  private apiUrl = 'https://jsonblob.com/api/1331916356509163520';
   private products: IProduct[] = [];
 
-  //El fetch deberia estar en el constructor
+  //El fetch deberia estar en el constructor? Yo diria que no, porque no se ejecuta al instanciar el servicio, sino al llamar a la funcion getProducts.
   constructor() {}
 
-  // GetAll, podria hacerse con httpclient, pero JsonBlob no permite hacer todas las operaciones CRUD, solo GET y POST. Lo hago con un fetch dentro de una funcion para poder reutilizarlo y capturar errores.
+  // GetAll, podria hacerse con httpclient, pero JsonBlob no permite hacer todas las operaciones CRUD, solo GET y POST (y en memoria porque el front creo que no puede acceder a bbdd, es funcion del back, solo manejar la sesion). 
+  // Lo hago con un fetch dentro de una funcion para poder reutilizarlo y capturar errores.
   async getProducts(): Promise<IProduct[]> {
     if (this.products.length === 0) {
       try {
@@ -26,7 +27,7 @@ export class ProductServiceService {
         }
         this.products = await response.json();
       } catch (error) {
-        console.error('Error en getProducts:', error);
+        console.error('Error en la funcion getProducts:', error);
         throw error;
       }
     }
@@ -60,10 +61,9 @@ export class ProductServiceService {
       const matchesMaxPrice =
         !filters.precioMax || product.price <= Number(filters.precioMax);
   
-      const matchesActive =
+        const matchesActive =
         filters.activo === undefined ||
-        filters.activo === '' ||
-        product.active === (filters.activo === 'true');
+        product.active === (filters.activo === 'true' || filters.activo === true);    
   
       return (
         matchesName &&
@@ -74,6 +74,7 @@ export class ProductServiceService {
       );
     });
   }
+  
   
   //JsonBlob no permite hacer todas las operaciones CRUD, solo GET y POST. Pero lo dejo comentado.
   //DeleteById

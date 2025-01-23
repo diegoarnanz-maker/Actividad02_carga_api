@@ -13,6 +13,13 @@ export class ProductFilterComponent {
   @Input() products: IProduct[] = [];
   @Output() filtersChanged = new EventEmitter<any>();
   categories: string[] = [];
+  filters: any = {
+    nombre: '',
+    categoria: '',
+    precioMin: undefined,
+    precioMax: undefined,
+    activo: undefined,
+  };
 
   constructor() {}
 
@@ -26,8 +33,19 @@ export class ProductFilterComponent {
   }
 
   applyFilters(filterForm: NgForm): void {
-    this.filtersChanged.emit(filterForm.value);
+    const values = { ...filterForm.value };
+  
+    if (values.activo === 'true') {
+      values.activo = true;
+    } else if (values.activo === 'false') {
+      values.activo = false;
+    } else {
+      values.activo = undefined;
+    }
+  
+    this.filtersChanged.emit(values);
   }
+  
 
   clearFilters(form: NgForm): void {
     form.resetForm();

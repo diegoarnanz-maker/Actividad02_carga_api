@@ -1,5 +1,5 @@
 <div class="card h-100 border-0 shadow-sm bg-white">
-  <!-- Imagen del producto -->
+  <!-- Imagen -->
   <div class="d-flex justify-content-center align-items-center overflow-hidden" style="height: 150px;">
     <img 
       [src]="product.image"
@@ -8,26 +8,22 @@
     >
   </div>
 
-  <!-- Cuerpo de la tarjeta -->
+  <!-- Cuerpo del card -->
   <div class="card-body p-3">
-    <!-- Título del producto -->
     <h5 
       class="card-title fw-bold text-dark mb-2 text-break"
     >
       {{ product.name }}
     </h5>
 
-    <!-- Descripción del producto -->
     <p class="card-text text-muted mb-2">
       {{ product.description }}
     </p>
 
-    <!-- Categoría -->
     <p class="card-text text-secondary mb-2">
       <strong>Categoría:</strong> {{ product.category }}
     </p>
 
-    <!-- Estado -->
     <p class="card-text">
       <strong>Estado:</strong>
       <span 
@@ -38,13 +34,11 @@
       </span>
     </p>
 
-    <!-- Precio -->
     <p class="card-text text-dark">
       <strong>Precio:</strong> {{ product.price }}€
     </p>
   </div>
 
-  <!-- Pie de la tarjeta -->
   <div class="card-footer bg-transparent border-0">
     <button class="btn btn-danger w-100 text-white" (click)="onDelete()">Eliminar</button>
   </div>
