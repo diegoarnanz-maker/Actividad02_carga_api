@@ -12,7 +12,7 @@ import { ProductFilterComponent } from '../../components/product-filter/product-
   styleUrl: './product-list.component.scss',
 })
 export class ProductListComponent implements OnInit {
-  products: IProduct[] = [];
+  arrProducts: IProduct[] = [];
   filteredProducts: IProduct[] = [];
 
   //Forma antigua
@@ -20,25 +20,18 @@ export class ProductListComponent implements OnInit {
 
   productService = inject(ProductServiceService);
 
-  ngOnInit(): void {
-    this.loadProducts();
-  }
-
-  loadProducts(): void {
-    this.productService
-      .getProducts()
-      .then((products) => {
-        this.products = products;
-        this.filteredProducts = [...products];
-      })
-      .catch((error) => {
-        console.error('Error en getProducts:', error);
-      });
+  async ngOnInit(): Promise<void> {
+    try {
+      this.arrProducts = await this.productService.getProducts();
+      this.filteredProducts = [...this.arrProducts];
+    } catch (error) {
+      console.error('Error al cargar los productos:', error);
+    }
   }
 
   onDeleteProduct(id: string): void {
     this.productService.deleteProduct(id);
-    this.products = this.productService.getArrLocal();
+    this.arrProducts = this.arrProducts.filter((product) => product._id !== id);
     this.filteredProducts = this.productService.filterProducts({
       nombre: '',
       categoria: '',
@@ -46,12 +39,12 @@ export class ProductListComponent implements OnInit {
       precioMax: undefined,
       activo: undefined,
     });
-      }
-
+  }
+  
   applyFilters(filters: any): void {
     console.log('Filtros aplicados:', filters);
     if (Object.keys(filters).length === 0) {
-      this.filteredProducts = [...this.products];
+      this.filteredProducts = [...this.arrProducts];
     } else {
       this.filteredProducts = this.productService.filterProducts(filters);
     }

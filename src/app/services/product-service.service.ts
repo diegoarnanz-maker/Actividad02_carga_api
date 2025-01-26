@@ -8,7 +8,6 @@ export class ProductServiceService {
   private apiUrl = 'https://jsonblob.com/api/1331916356509163520';
   private products: IProduct[] = [];
 
-  //El fetch deberia estar en el constructor? Yo diria que no, porque no se ejecuta al instanciar el servicio, sino al llamar a la funcion getProducts.
   constructor() {}
 
   // GetAll, podria hacerse con httpclient, pero JsonBlob no permite hacer todas las operaciones CRUD, solo GET y POST (y en memoria porque el front creo que no puede acceder a bbdd, es funcion del back, solo manejar la sesion). 
@@ -42,8 +41,11 @@ export class ProductServiceService {
     this.products = this.products.filter((product) => product._id !== id);
   }
 
-  getArrLocal(): IProduct[] {
-    return this.products;
+  getCategories(): string[] {
+    const categorySet = new Set<string>(
+      this.products.map((product) => product.category)
+    );
+    return Array.from(categorySet);
   }
 
   filterProducts(filters: any): IProduct[] {
@@ -51,20 +53,20 @@ export class ProductServiceService {
       const matchesName =
         !filters.nombre ||
         product.name.toLowerCase().includes(filters.nombre.toLowerCase());
-  
+
       const matchesCategory =
         !filters.categoria || product.category.trim() === filters.categoria.trim();
-  
+
       const matchesMinPrice =
         !filters.precioMin || product.price >= Number(filters.precioMin);
-  
+
       const matchesMaxPrice =
         !filters.precioMax || product.price <= Number(filters.precioMax);
-  
-        const matchesActive =
+
+      const matchesActive =
         filters.activo === undefined ||
-        product.active === (filters.activo === 'true' || filters.activo === true);    
-  
+        product.active === (filters.activo === 'true' || filters.activo === true);
+
       return (
         matchesName &&
         matchesCategory &&
@@ -74,24 +76,4 @@ export class ProductServiceService {
       );
     });
   }
-  
-  
-  //JsonBlob no permite hacer todas las operaciones CRUD, solo GET y POST. Pero lo dejo comentado.
-  //DeleteById
-  // async deleteProduct(id: string): Promise<void> {
-  //   try {
-  //     const response = await fetch(`${this.apiUrl}/${id}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       }
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error(`Error al eliminar producto: ${response.statusText}`);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error en deleteProduct:', error);
-  //     throw error;
-  //   }
-  // }
 }

@@ -21,17 +21,16 @@ import { Router } from '@angular/router';
 
 //Explicacion:
 // Para jugar un poco con el control flow y ts he decidido que el cliente solo puede elegir una categoria de las que ya estan presentes en el array de jsonblob. Realmente no creo que fuese algo que se hiciese en un proyecto real porque tiene que cargar todos los productos en el contructor para buscar la categoria, un aliexpres por ej seria inpensable pero me parecia interesante hacerlo asi por practicar.
-
 export class ProductFormComponent {
-  addProductForm!: FormGroup;  
+  addProductForm!: FormGroup;
   submitted = false;
 
-  products: IProduct[] = [];
+  arrProducts: IProduct[] = [];
   categories: string[] = [];
 
   productService = inject(ProductServiceService);
   router = inject(Router);
-  
+
   constructor() {
     this.addProductForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -52,26 +51,26 @@ export class ProductFormComponent {
       ]),
       active: new FormControl('true', Validators.required),
     });
-
-    this.loadProducts();
   }
 
-  loadProducts() {
-    this.productService.getProducts().then((data) => {
-      this.products = data;
-      this.categories = [
-        ...new Set(data.map((product) => product.category)),
-      ];
-    }).catch((err) => {
-      console.error('Error al cargar productos:', err);
-    });
+  async ngOnInit(): Promise<void> {
+    try {
+      this.arrProducts = await this.productService.getProducts();
+      this.categories = this.productService.getCategories();
+      console.log('Categorías disponibles:', this.categories);
+    } catch (error) {
+      console.error('Error al cargar productos o categorías:', error);
+    }
   }
 
-  checkControl(FormControlName: string, validator: string): boolean | undefined {
+  checkControl(
+    FormControlName: string,
+    validator: string
+  ): boolean | undefined {
     return (
       this.addProductForm.get(FormControlName)?.hasError(validator) &&
       this.addProductForm.get(FormControlName)?.touched
-    )
+    );
   }
 
   resetForm() {
@@ -84,7 +83,7 @@ export class ProductFormComponent {
     if (this.addProductForm.valid) {
       const formProduct = {
         ...this.addProductForm.value,
-        _id: uuidv4()
+        _id: uuidv4(),
       };
       this.productService.addProduct(formProduct);
       console.log('Producto guardado:', formProduct);
@@ -94,5 +93,4 @@ export class ProductFormComponent {
       console.error('Formulario inválido');
     }
   }
-  
 }
