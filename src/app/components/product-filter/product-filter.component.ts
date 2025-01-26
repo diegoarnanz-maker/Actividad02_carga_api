@@ -21,6 +21,8 @@ export class ProductFilterComponent {
     activo: undefined,
   };
 
+  errorPrecio: boolean = false;
+
   constructor() {}
 
   ngOnChanges(): void {
@@ -29,12 +31,19 @@ export class ProductFilterComponent {
   }
 
   extractCategories(): void {
-    this.categories = [...new Set(this.products.map((product) => product.category))];
+    this.categories = [
+      ...new Set(this.products.map((product) => product.category)),
+    ];
   }
 
   applyFilters(filterForm: NgForm): void {
     const values = { ...filterForm.value };
-  
+
+    // if (values.precioMin && values.precioMax && values.precioMax < values.precioMin) {
+    //   alert('El precio máximo no puede ser menor que el precio mínimo.');
+    //   return;
+    // }
+
     if (values.activo === 'true') {
       values.activo = true;
     } else if (values.activo === 'false') {
@@ -42,10 +51,24 @@ export class ProductFilterComponent {
     } else {
       values.activo = undefined;
     }
-  
+
     this.filtersChanged.emit(values);
   }
-  
+
+  checkPriceRange(min: number, max: number): void {
+    const minValue = +min || undefined;
+    const maxValue = +max || undefined;
+
+    if (
+      minValue !== undefined &&
+      maxValue !== undefined &&
+      maxValue < minValue
+    ) {
+      this.errorPrecio = true;
+    } else {
+      this.errorPrecio = false;
+    }
+  }
 
   clearFilters(form: NgForm): void {
     form.resetForm();

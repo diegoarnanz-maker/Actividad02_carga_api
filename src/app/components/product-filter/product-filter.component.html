@@ -1,5 +1,5 @@
 <!-- FormsTemplate  -->
- 
+
 <form
   #filterForm="ngForm"
   (ngSubmit)="applyFilters(filterForm)"
@@ -38,14 +38,30 @@
         type="number"
         placeholder="Mín"
         name="precioMin"
+        #precioMin="ngModel"
+        min="0.01"
         ngModel
+        (input)="
+          checkPriceRange(
+            filterForm.value.precioMin,
+            filterForm.value.precioMax
+          )
+        "
       />
       <input
         class="form-control bg-light text-dark"
         type="number"
         placeholder="Máx"
         name="precioMax"
+        #precioMax="ngModel"
+        min="0.01"
         ngModel
+        (input)="
+          checkPriceRange(
+            filterForm.value.precioMin,
+            filterForm.value.precioMax
+          )
+        "
       />
     </div>
   </div>
@@ -68,4 +84,12 @@
       Borrar Filtros
     </button>
   </div>
+  @if (errorPrecio) {
+  <div class="text-danger">
+    El precio máximo no puede ser menor que el precio mínimo.
+  </div>
+  } 
+  @if (precioMin.invalid && precioMin.touched || precioMax.invalid && precioMax.touched) {
+  <div class="text-danger">Los valores de rango de precio deben ser positivos.</div>
+  }
 </form>
